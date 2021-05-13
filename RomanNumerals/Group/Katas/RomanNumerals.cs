@@ -17,61 +17,53 @@ namespace Katas
             {1000, "M" }
         };
 
-        public static string Convert(int x)
+        public static int ConvertFromRomanNumerals(string x)
         {
-            string romanNumeralString = "";
+           return 1;
+        }
 
-            //switch (x)
-            //{
-            //    case 1:
-            //        return "I";
-            //    case 2:
-            //        return "II";
-            //    default:
-            //        throw new Exception();
-            //}
-
-            if (romanNumeral.ContainsKey(x))
+        public static string ConvertToRomanNumerals(int x)
+        {
+            string romanNumeral = "";
+            if (x > 1000) 
             {
-                return romanNumeral[x];
+                int thousandCount = x / 1000;
+                romanNumeral += getMultipleNumerals(thousandCount, "M");
+                x = x % 1000;
+            }
+            if (x > 900)
+            {
+                romanNumeral += "CM";
+                x = x % 900;
+            }
+            if (x > 500)
+            {
+                x = x % 500;
+                romanNumeral += "D";
+            }
+            if (x > 400)
+            {
+                romanNumeral += "CD";
+                x = x % 400;
+            }
+            if (x > 100)
+            {
+                int hundredCount = x / 100;
+                romanNumeral += getMultipleNumerals(hundredCount, "C");
+                x = x % 100;
             }
 
-            //49 - XLIX
-           // for( int i=0; i < romanNumeral.Count; i++)
-           // {   
-           //
-           //     int modolus = x % romanNumeral.Keys; //Return all keys in dictonary, and get remainder
-           //     
-           //     x = x - modolus;
-           //
-           //
-           // }
+            return romanNumeral;
+        }
 
-            if (x / 1000 > 0)
+        public static string getMultipleNumerals(int x, string romanNumeral)
+        {
+            string multiple = "";
+            for (int i=0; i<x; i++)
             {
-                romanNumeralString += "M";
-                int remainder = x % 1000;
-
+                multiple += romanNumeral;
             }
-
-
-           // Centea, Emilia
-           // start from number x and get the string length(49-> 2) have a list to put the 2 for int i = 1 to 2y = x % 10if (y == 0) x = x / 10else l.add(y)
-           //
-           // L = {​​40, 9 }​​ // 49
-           //
-           // [13:27] Centea, Emilia
-           // l = {​​400 }​​ //400
-           //
-           // [13:27] Centea, Emilia
-           // L = {​​400, 80, 7 }​​//487
-           //
-           // [13:28] Centea, Emilia
-           // N = {​​XL, IX }​​
-
-
-
-            throw new Exception("");
+           return multiple;
         }
     }
 }
