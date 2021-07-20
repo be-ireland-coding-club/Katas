@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace Katas
 {
@@ -6,7 +6,7 @@ namespace Katas
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Hello World!");           
         }
     }
 }
