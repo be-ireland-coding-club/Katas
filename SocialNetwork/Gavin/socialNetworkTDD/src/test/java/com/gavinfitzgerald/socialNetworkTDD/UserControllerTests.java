@@ -3,6 +3,9 @@ package com.gavinfitzgerald.socialNetworkTDD;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import org.mockito.Mockito;
 import java.util.ArrayList;
@@ -20,7 +23,7 @@ public class UserControllerTests extends BaseTestClass{
     private ITimeLineRepository timeLineRepositoryMock;
 
     @Test
-    public void testUserControllerCanPublishMessageToPersonalTimeline(){
+    public void testCanPublishMessageToPersonalTimeline() throws MessageTooLongException {
         //Arrange
         String message = "Hello World";
         List<Message> messages = new ArrayList<Message>();
@@ -35,21 +38,33 @@ public class UserControllerTests extends BaseTestClass{
     }
 
     @Test
-    public void testUserControllerCanPublishMultilpleMessageToPersonalTimeline(){
+    public void testCanPublishMultilpleMessageToPersonalTimeline() throws MessageTooLongException{
         //Arrange
-        String user = "Bob";
         String firstMessage = "First Message";
         String secondMessage = "Second Message";
         String thirdMessage = "Third Message";
 
         //Act
-        unitUnderTest.post(user, firstMessage);
-        unitUnderTest.post(user, secondMessage);
-        unitUnderTest.post(user, thirdMessage);
+        unitUnderTest.post(USER_ONE, firstMessage);
+        unitUnderTest.post(USER_ONE, secondMessage);
+        unitUnderTest.post(USER_ONE, thirdMessage);
 
         //Assert
         verify(timeLineRepositoryMock).addMessage(USER_ONE, firstMessage);
         verify(timeLineRepositoryMock).addMessage(USER_ONE, secondMessage);
         verify(timeLineRepositoryMock).addMessage(USER_ONE, thirdMessage);
+    }
+
+    @Test
+    public void testThrowMessageTooLongExceptionIfPostMessageLongerThan500Characters() throws MessageTooLongException{
+        //Act / Assert
+        MessageTooLongException thrown = assertThrows(
+                MessageTooLongException.class,
+                () -> unitUnderTest.post(USER_ONE, TOO_LONG_A_MESSAGE),
+                "MessageTooLongException not thrown"
+        );
+
+        //Assert
+        assertTrue(thrown.getMessage().contains(EXPECTED_MESSAGE_TOO_LONG_MESAGE));
     }
 }
