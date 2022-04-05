@@ -25,7 +25,7 @@ public class Message {
         return user;
     }
 
-    private Date getTimestamp() {
+    public Date getTimestamp() {
         return timestamp;
     }
 

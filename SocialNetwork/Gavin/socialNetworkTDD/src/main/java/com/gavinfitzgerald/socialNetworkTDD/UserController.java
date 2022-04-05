@@ -1,22 +1,21 @@
 package com.gavinfitzgerald.socialNetworkTDD;
 
-import java.text.SimpleDateFormat;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.util.*;
 
+@Component
 public class UserController {
-    private static HashMap<String, List<Message>> timeline = new HashMap<String, List<Message>>();
+
+    @Autowired
+    private ITimeLineRepository timeLineRepository;
 
     public void post(String user, String message){
-        if( timeline.containsKey(user)){
-            timeline.get(user).add(new Message(user, message, new Date()));
-        } else {
-            List<Message> userMessageList = new ArrayList<Message>();
-            userMessageList.add(new Message(user, message, new Date()));
-            timeline.put(user, userMessageList);
-        }
+        timeLineRepository.addMessage(user, message);
     }
 
     public List<Message> getTimeline(String user) {
-        return timeline.get(user);
+        return timeLineRepository.getTimeline(user);
     }
 }
