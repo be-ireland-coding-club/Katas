@@ -21,6 +21,8 @@ public class UserControllerTests extends BaseTestClass{
     @Mock
     private ITimeLineRepository timeLineRepositoryMock;
 
+    @Mock IFollowersRepository followersRepositoryMock;
+
     @Test
     public void testCanPublishMessageToPersonalTimeline() throws MessageTooLongException {
         //Arrange
@@ -73,5 +75,38 @@ public class UserControllerTests extends BaseTestClass{
 
         //Assert
         verify(timeLineRepositoryMock).getTimeline(USER_ONE);
+    }
+
+    @Test
+    public void testCanFollowAnotherUser() {
+        //Arrange
+        List<String> followers = new ArrayList<String>(){{ add(USER_TWO); }};
+
+        //Act
+        unitUnderTest.subscribes(followers, USER_ONE);
+
+        //Assert
+        verify(followersRepositoryMock).follow(followers, USER_ONE);
+    }
+
+    @Test
+    public void testCanFolowMultipleUsers(){
+        //Arrange
+        List<String> followers = new ArrayList<String>(){{ add(USER_TWO); add(USER_THREE); }};
+
+        //Act
+        unitUnderTest.subscribes(followers, USER_ONE);
+
+        //Assert
+        verify(followersRepositoryMock).follow(followers, USER_ONE);
+    }
+
+    @Test
+    public void testGetFollowersOfUser(){
+        //Act
+        unitUnderTest.getFollowers(USER_ONE);
+
+        //Assert
+        verify(followersRepositoryMock).getFollowers(USER_ONE);
     }
 }

@@ -10,6 +10,7 @@ public class BaseTestClass {
     final String DATE_PATTERN = "yyyy-MM-dd HH-mm";
     final String USER_ONE = "Bob";
     final String USER_TWO = "Alice";
+    final String USER_THREE = "Trudy";
     final String FIRST_MESSAGE = "First Message";
     final String SECOND_MESSAGE = "Second Message";
     final String THIRD_MESSAGE = "Third Message";
