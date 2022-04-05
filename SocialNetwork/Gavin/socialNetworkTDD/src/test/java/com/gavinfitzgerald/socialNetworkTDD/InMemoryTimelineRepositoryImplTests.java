@@ -10,7 +10,9 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
 
 public class InMemoryTimelineRepositoryImplTests extends BaseTestClass{
 
@@ -56,5 +58,18 @@ public class InMemoryTimelineRepositoryImplTests extends BaseTestClass{
         assertEquals(expectedFirstMessage, actual.get(0).toString(), "Timeline should return '"+expectedFirstMessage+"' as first post");
         assertEquals(expectedSecondMessage, actual.get(1).toString(), "Timeline should return '"+expectedSecondMessage+"' as second post");
         assertEquals(expectedThirdMessage, actual.get(2).toString(), "Timeline should return '"+expectedThirdMessage+"' as third post");
+    }
+
+    @Test
+    //TODO: Does this test add any value?
+    public void testGetTimelineForNonExistantUserWillReturnNull() {
+        //Arrange
+        InMemoryTimeLineRepositoryImpl unitUnderTest = new InMemoryTimeLineRepositoryImpl();
+
+        //Act
+        List<Message> actual = unitUnderTest.getTimeline(USER_ONE);
+
+        //Assert
+        assertNull(actual);
     }
 }

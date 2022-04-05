@@ -20,8 +20,14 @@ public class UserController{
         timeLineRepository.addMessage(user, message);
     }
 
-    public List<Message> getTimeline(String user) {
-        return timeLineRepository.getTimeline(user);
+    /**
+     * Returns a users personal timeline
+     *
+     * @param   userName    Username to use in retrieval of timeline
+     * @return              The specified users timeline or null if user not found.
+     */
+    public List<Message> getTimeline(String userName) {
+        return timeLineRepository.getTimeline(userName);
     }
 
     public void follow(String user){

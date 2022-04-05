@@ -4,8 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import org.mockito.Mockito;
 import java.util.ArrayList;
@@ -39,20 +38,16 @@ public class UserControllerTests extends BaseTestClass{
 
     @Test
     public void testCanPublishMultilpleMessageToPersonalTimeline() throws MessageTooLongException{
-        //Arrange
-        String firstMessage = "First Message";
-        String secondMessage = "Second Message";
-        String thirdMessage = "Third Message";
 
         //Act
-        unitUnderTest.post(USER_ONE, firstMessage);
-        unitUnderTest.post(USER_ONE, secondMessage);
-        unitUnderTest.post(USER_ONE, thirdMessage);
+        unitUnderTest.post(USER_ONE, FIRST_MESSAGE);
+        unitUnderTest.post(USER_ONE, SECOND_MESSAGE);
+        unitUnderTest.post(USER_ONE, THIRD_MESSAGE);
 
         //Assert
-        verify(timeLineRepositoryMock).addMessage(USER_ONE, firstMessage);
-        verify(timeLineRepositoryMock).addMessage(USER_ONE, secondMessage);
-        verify(timeLineRepositoryMock).addMessage(USER_ONE, thirdMessage);
+        verify(timeLineRepositoryMock).addMessage(USER_ONE, FIRST_MESSAGE);
+        verify(timeLineRepositoryMock).addMessage(USER_ONE, SECOND_MESSAGE);
+        verify(timeLineRepositoryMock).addMessage(USER_ONE, THIRD_MESSAGE);
     }
 
     @Test
@@ -66,5 +61,17 @@ public class UserControllerTests extends BaseTestClass{
 
         //Assert
         assertTrue(thrown.getMessage().contains(EXPECTED_MESSAGE_TOO_LONG_MESAGE));
+    }
+
+    @Test
+    public void testCanReadFromAUsersTimeline() throws MessageTooLongException{
+        //Arrange
+        unitUnderTest.post(USER_ONE, FIRST_MESSAGE);
+
+        //Act
+        unitUnderTest.getTimeline(USER_ONE);
+
+        //Assert
+        verify(timeLineRepositoryMock).getTimeline(USER_ONE);
     }
 }
