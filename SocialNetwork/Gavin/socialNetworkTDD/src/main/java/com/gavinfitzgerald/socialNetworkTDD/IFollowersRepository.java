@@ -3,7 +3,7 @@ package com.gavinfitzgerald.socialNetworkTDD;
 import java.util.List;
 
 public interface IFollowersRepository {
-    public void follow(List<String> follower, String leader);
+    public void subscribe(List<String> subscriptions, String user);
 
-    public List<String> getFollowers(String leader);
+    public List<String> getSubscriptions(String user);
 }

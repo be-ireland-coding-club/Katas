@@ -72,4 +72,39 @@ public class InMemoryTimelineRepositoryImplTests extends BaseTestClass{
         //Assert
         assertNull(actual);
     }
+
+    @Test
+    public void testCanReadTimelineWithSubscriptions(){
+        //Arrange
+        InMemoryTimeLineRepositoryImpl unitUnderTest = new InMemoryTimeLineRepositoryImpl();
+        String u1text1 = "Bob's first post";
+        Message u1message1Expected = new Message(USER_ONE, u1text1, new Date());
+        String u1text2 = "Bob's second post";
+        Message u1message2Expected = new Message(USER_ONE, u1text2, new Date());
+        unitUnderTest.addMessage(USER_ONE, u1text1);
+        unitUnderTest.addMessage(USER_ONE, u1text2);
+
+        String u2text1 = "Alice's first post";
+        Message u2message1Expected = new Message(USER_TWO, u2text1, new Date());
+        String u2text2 = "Alice's second post";
+        Message u2message2Expected = new Message(USER_TWO, u2text2, new Date());
+        unitUnderTest.addMessage(USER_TWO, u2text1);
+        unitUnderTest.addMessage(USER_TWO, u2text2);
+
+        String u3text1 = "Trudy's first post";
+        Message u3message1Expected = new Message(USER_THREE, u3text1, new Date());
+        unitUnderTest.addMessage(USER_THREE, u3text1);
+
+        List<String> subscriptions = new ArrayList<String>(){{ add(USER_TWO); add(USER_THREE); }};
+
+        //Act
+        List<Message> actual = unitUnderTest.getTimeline(USER_ONE, subscriptions);
+
+        //Assert
+        assertEquals(u1message1Expected.toString(), actual.get(0).toString());
+        assertEquals(u1message2Expected.toString(), actual.get(1).toString());
+        assertEquals(u2message1Expected.toString(), actual.get(2).toString());
+        assertEquals(u2message2Expected.toString(), actual.get(3).toString());
+        assertEquals(u3message1Expected.toString(), actual.get(4).toString());
+    }
 }

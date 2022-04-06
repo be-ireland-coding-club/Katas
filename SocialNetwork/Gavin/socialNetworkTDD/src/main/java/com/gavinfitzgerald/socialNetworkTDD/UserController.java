@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class UserController {
@@ -33,11 +35,21 @@ public class UserController {
         return timeLineRepository.getTimeline(userName);
     }
 
-    public void subscribes(List<String> followers, String leader){
-        followersRepository.follow(followers, leader);
+    /**
+     * Returns a users personal timeline combined with subscription timelines
+     *
+     * @param   userName    Username to use in retrieval of timeline
+     * @return              A single timeline combining the users personal timeline and their subscription timelines
+     */
+    public List<Message> getTimelineWithSubscriptions(String userName, List<String> subscriptions) {
+        return timeLineRepository.getTimeline(userName, subscriptions);
     }
 
-    public void getFollowers(String leader){
-        followersRepository.getFollowers(leader);
+    public void subscribes(List<String> subscriptions, String user){
+        followersRepository.subscribe(subscriptions, user);
+    }
+
+    public List<String> getSubscriptions(String user){
+        return followersRepository.getSubscriptions(user);
     }
 }

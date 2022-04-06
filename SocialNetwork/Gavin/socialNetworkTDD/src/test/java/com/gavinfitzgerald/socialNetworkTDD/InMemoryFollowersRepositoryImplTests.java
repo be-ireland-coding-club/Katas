@@ -12,15 +12,15 @@ public class InMemoryFollowersRepositoryImplTests extends BaseTestClass {
     public void testReturnFollowerListFromUser(){
         //Arrange
         IFollowersRepository followersRepository = new InMemoryFollowersRepositoryImpl();
-        List<String> followers = new ArrayList<String>(){{ add(USER_TWO); add(USER_THREE);}};
-        followersRepository.follow(followers, USER_ONE);
+        List<String> subscriptions = new ArrayList<String>(){{ add(USER_TWO); add(USER_THREE);}};
+        followersRepository.subscribe(subscriptions, USER_ONE);
 
         //Act
-        List<String> actual = followersRepository.getFollowers(USER_ONE);
+        List<String> actual = followersRepository.getSubscriptions(USER_ONE);
 
         //Assert
-        assertEquals(actual.get(0), USER_TWO);
-        assertEquals(actual.get(1), USER_THREE);
+        assertEquals(USER_TWO, actual.get(0));
+        assertEquals(USER_THREE, actual.get(1));
     }
 
 }

@@ -10,17 +10,17 @@ import java.util.List;
 public class InMemoryFollowersRepositoryImpl implements IFollowersRepository {
     private static HashMap<String, List<String>> followersDataSource = new HashMap<String, List<String>>();
 
-    public void follow(List<String> followers, String leader) {
-        if (followersDataSource.containsKey(leader)){
-            for (String follower: followers) {
-                followersDataSource.get(leader).add(follower);
+    public void subscribe(List<String> subscriptions, String user) {
+        if (followersDataSource.containsKey(user)){
+            for (String userName: subscriptions) {
+                followersDataSource.get(user).add(userName);
             }
         } else {
-            followersDataSource.put(leader, followers);
+            followersDataSource.put(user, subscriptions);
         }
     }
 
-    public List<String> getFollowers(String leader) {
-        return followersDataSource.get(leader);
+    public List<String> getSubscriptions(String user) {
+        return followersDataSource.get(user);
     }
 }

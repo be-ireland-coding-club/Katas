@@ -80,33 +80,35 @@ public class UserControllerTests extends BaseTestClass{
     @Test
     public void testCanFollowAnotherUser() {
         //Arrange
-        List<String> followers = new ArrayList<String>(){{ add(USER_TWO); }};
+        List<String> subscriptions = new ArrayList<String>(){{ add(USER_TWO); }};
 
         //Act
-        unitUnderTest.subscribes(followers, USER_ONE);
+        unitUnderTest.subscribes(subscriptions, USER_ONE);
 
         //Assert
-        verify(followersRepositoryMock).follow(followers, USER_ONE);
+        verify(followersRepositoryMock).subscribe(subscriptions, USER_ONE);
     }
 
     @Test
     public void testCanFolowMultipleUsers(){
         //Arrange
-        List<String> followers = new ArrayList<String>(){{ add(USER_TWO); add(USER_THREE); }};
+        List<String> subscriptions = new ArrayList<String>(){{ add(USER_TWO); add(USER_THREE); }};
 
         //Act
-        unitUnderTest.subscribes(followers, USER_ONE);
+        unitUnderTest.subscribes(subscriptions, USER_ONE);
 
         //Assert
-        verify(followersRepositoryMock).follow(followers, USER_ONE);
+        verify(followersRepositoryMock).subscribe(subscriptions, USER_ONE);
     }
 
     @Test
     public void testGetFollowersOfUser(){
         //Act
-        unitUnderTest.getFollowers(USER_ONE);
+        unitUnderTest.getSubscriptions(USER_ONE);
 
         //Assert
-        verify(followersRepositoryMock).getFollowers(USER_ONE);
+        verify(followersRepositoryMock).getSubscriptions(USER_ONE);
     }
+
+
 }
