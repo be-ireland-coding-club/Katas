@@ -3,7 +3,7 @@ package com.gavinfitzgerald.socialNetworkTDD;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Message {
+public class Message implements Comparable<Message> {
 
     private final String DATE_PATTERN = "yyyy-MM-dd HH-mm";
     private SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_PATTERN);
@@ -32,5 +32,10 @@ public class Message {
     @Override
     public String toString() {
         return getUser()+", "+dateFormat.format(getTimestamp()).toString()+": "+getMessage()+"\n";
+    }
+
+    @Override
+    public int compareTo(Message o) {
+        return getTimestamp().compareTo(o.getTimestamp());
     }
 }

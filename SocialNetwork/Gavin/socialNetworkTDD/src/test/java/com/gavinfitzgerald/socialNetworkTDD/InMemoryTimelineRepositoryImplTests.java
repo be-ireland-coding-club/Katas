@@ -61,7 +61,6 @@ public class InMemoryTimelineRepositoryImplTests extends BaseTestClass{
     }
 
     @Test
-    //TODO: Does this test add any value?
     public void testGetTimelineForNonExistantUserWillReturnNull() {
         //Arrange
         InMemoryTimeLineRepositoryImpl unitUnderTest = new InMemoryTimeLineRepositoryImpl();
@@ -106,5 +105,46 @@ public class InMemoryTimelineRepositoryImplTests extends BaseTestClass{
         assertEquals(u2message1Expected.toString(), actual.get(2).toString());
         assertEquals(u2message2Expected.toString(), actual.get(3).toString());
         assertEquals(u3message1Expected.toString(), actual.get(4).toString());
+    }
+
+    @Test
+    public void testTimelineWithSubscriptionsIsOrderedByTimestamp() throws InterruptedException {
+        //Arrange
+        InMemoryTimeLineRepositoryImpl unitUnderTest = new InMemoryTimeLineRepositoryImpl();
+        String u1text1 = "Bob's first post";
+        String u1text2 = "Bob's second post";
+        String u2text1 = "Alice's first post";
+        String u2text2 = "Alice's second post";
+        String u3text1 = "Trudy's first post";
+
+        //Order of Messages - Sleep added to keep tests deterministic
+        unitUnderTest.addMessage(USER_ONE, u1text1);
+        Thread.sleep(1);
+        unitUnderTest.addMessage(USER_TWO, u2text1);
+        Thread.sleep(1);
+        unitUnderTest.addMessage(USER_THREE, u3text1);
+        Thread.sleep(1);
+        unitUnderTest.addMessage(USER_TWO, u2text2);
+        Thread.sleep(1);
+        unitUnderTest.addMessage(USER_ONE, u1text2);
+
+        List<String> subscriptions = new ArrayList<String>(){{ add(USER_TWO); add(USER_THREE); }};
+
+        //Act
+        List<Message> actual = unitUnderTest.getTimeline(USER_ONE, subscriptions);
+
+        //Assert
+        //TODO: Refactor - had to get timestamp from actual message to make test deterministic
+        Message u1message1Expected = new Message(USER_ONE, u1text1, actual.get(0).getTimestamp());
+        Message u2message1Expected = new Message(USER_TWO, u2text1, actual.get(1).getTimestamp());
+        Message u3message1Expected = new Message(USER_THREE, u3text1, actual.get(2).getTimestamp());
+        Message u2message2Expected = new Message(USER_TWO, u2text2, actual.get(3).getTimestamp());
+        Message u1message2Expected = new Message(USER_ONE, u1text2, actual.get(4).getTimestamp());
+
+        assertEquals(u1message1Expected.toString(), actual.get(0).toString());
+        assertEquals(u2message1Expected.toString(), actual.get(1).toString());
+        assertEquals(u3message1Expected.toString(), actual.get(2).toString());
+        assertEquals(u2message2Expected.toString(), actual.get(3).toString());
+        assertEquals(u1message2Expected.toString(), actual.get(4).toString());
     }
 }

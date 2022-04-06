@@ -2,10 +2,7 @@ package com.gavinfitzgerald.socialNetworkTDD;
 
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -19,7 +16,7 @@ public class InMemoryTimeLineRepositoryImpl implements ITimeLineRepository {
 
     public List<Message> getTimeline(String user, List<String> subscriptions) {
         List<Message> personalTimeline = timelines.get(user);
-        return joinPersonalTimelineWithSubscriptions(personalTimeline, subscriptions);
+        return (personalTimeline != null) ? joinPersonalTimelineWithSubscriptions(personalTimeline, subscriptions) : null;
     }
 
     private List<Message> joinPersonalTimelineWithSubscriptions(List<Message> personalTimeline, List<String> subscriptions) {
@@ -29,6 +26,7 @@ public class InMemoryTimeLineRepositoryImpl implements ITimeLineRepository {
             combinedTimeline = Stream.concat(combinedTimeline.stream(), subscriptionTimeline.stream())
                     .collect(Collectors.toList());
         }
+        Collections.sort(combinedTimeline);
         return combinedTimeline;
     }
 

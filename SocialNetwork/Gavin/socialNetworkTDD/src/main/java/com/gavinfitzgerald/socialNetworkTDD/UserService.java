@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Component
-public class UserController {
+public class UserService {
 
     private final int MAX_MESSAGE_LENGTH = 500;
 

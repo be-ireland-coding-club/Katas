@@ -3,6 +3,7 @@ package com.gavinfitzgerald.socialNetworkTDD;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @SpringBootTest
 public class BaseTestClass {

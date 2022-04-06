@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 public class UserControllerTests extends BaseTestClass{
 
     @InjectMocks
-    private UserController unitUnderTest;
+    private UserService unitUnderTest;
 
     @Mock
     private ITimeLineRepository timeLineRepositoryMock;
@@ -102,7 +102,7 @@ public class UserControllerTests extends BaseTestClass{
     }
 
     @Test
-    public void testGetFollowersOfUser(){
+    public void testSubscriptionsOfUser(){
         //Act
         unitUnderTest.getSubscriptions(USER_ONE);
 
