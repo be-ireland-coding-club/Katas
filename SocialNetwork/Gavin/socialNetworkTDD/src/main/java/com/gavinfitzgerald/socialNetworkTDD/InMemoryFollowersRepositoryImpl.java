@@ -1,12 +1,11 @@
-package com.gavinfitzgerald.socialNetworkTDD;
+package com.gavinfitzgerald.socialNetworkTDD.Repositories;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-@Component("InMemoryFollowersRepositoryImpl")
+@Repository("InMemoryFollowersRepositoryImpl")
 public class InMemoryFollowersRepositoryImpl implements IFollowersRepository {
     private static HashMap<String, List<String>> followersDataSource = new HashMap<String, List<String>>();
 

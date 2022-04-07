@@ -1,14 +1,16 @@
-package com.gavinfitzgerald.socialNetworkTDD;
+package com.gavinfitzgerald.socialNetworkTDD.Services;
 
+import com.gavinfitzgerald.socialNetworkTDD.Message;
+import com.gavinfitzgerald.socialNetworkTDD.MessageTooLongException;
+import com.gavinfitzgerald.socialNetworkTDD.Repositories.IFollowersRepository;
+import com.gavinfitzgerald.socialNetworkTDD.Repositories.ITimeLineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-@Component
-public class UserService {
+@Service
+public class UserService implements IUserService {
 
     private final int MAX_MESSAGE_LENGTH = 500;
 
@@ -18,7 +20,7 @@ public class UserService {
     @Autowired
     private IFollowersRepository followersRepository;
 
-    public void post(String user, String message) throws MessageTooLongException{
+    public void post(String user, String message) throws MessageTooLongException {
         if(message.length() > MAX_MESSAGE_LENGTH){
             throw new MessageTooLongException("Message too long. "+MAX_MESSAGE_LENGTH+" is the maximum number of characters.");
         }

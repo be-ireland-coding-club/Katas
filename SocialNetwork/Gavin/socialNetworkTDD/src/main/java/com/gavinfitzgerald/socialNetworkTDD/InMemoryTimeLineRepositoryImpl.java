@@ -1,12 +1,13 @@
-package com.gavinfitzgerald.socialNetworkTDD;
+package com.gavinfitzgerald.socialNetworkTDD.Repositories;
 
-import org.springframework.stereotype.Component;
+import com.gavinfitzgerald.socialNetworkTDD.Message;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Component("InMemoryTimeLineRepositoryImpl")
+@Repository("InMemoryTimeLineRepositoryImpl")
 public class InMemoryTimeLineRepositoryImpl implements ITimeLineRepository {
     private static HashMap<String, List<Message>> timelines = new HashMap<String, List<Message>>();
 

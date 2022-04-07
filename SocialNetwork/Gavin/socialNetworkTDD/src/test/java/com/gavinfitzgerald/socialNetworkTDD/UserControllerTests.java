@@ -1,114 +1,63 @@
 package com.gavinfitzgerald.socialNetworkTDD;
-
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
 
-public class UserControllerTests extends BaseTestClass{
+@ExtendWith(SpringExtension.class)
+@WebMvcTest
+class UserControllerTests {
 
-    @InjectMocks
-    private UserService unitUnderTest;
+    @Autowired
+    MockMvc mockMvc;
 
-    @Mock
-    private ITimeLineRepository timeLineRepositoryMock;
-
-    @Mock IFollowersRepository followersRepositoryMock;
+    @MockBean
+    private IUserService userServiceMock;
 
     @Test
-    public void testCanPublishMessageToPersonalTimeline() throws MessageTooLongException {
-        //Arrange
-        String message = "Hello World";
-        List<Message> messages = new ArrayList<Message>();
-        messages.add(new Message(USER_ONE, message, new Date()));
-        Mockito.when(timeLineRepositoryMock.getTimeline(anyString())).thenReturn(messages);
-
-        //Act
-        unitUnderTest.post(USER_ONE, message);
-
-        //Assert
-        verify(timeLineRepositoryMock).addMessage(USER_ONE, message);
+    void testPostAMessageReturns200() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/post")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("user", "Bob")
+                .param("message", "Testomg")
+        ).andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
-    public void testCanPublishMultilpleMessageToPersonalTimeline() throws MessageTooLongException{
+    void testPostAMessageReturns400() throws Exception {
+        doThrow(MessageTooLongException.class)
+                .when(userServiceMock)
+                .post(anyString(), anyString());
 
-        //Act
-        unitUnderTest.post(USER_ONE, FIRST_MESSAGE);
-        unitUnderTest.post(USER_ONE, SECOND_MESSAGE);
-        unitUnderTest.post(USER_ONE, THIRD_MESSAGE);
 
-        //Assert
-        verify(timeLineRepositoryMock).addMessage(USER_ONE, FIRST_MESSAGE);
-        verify(timeLineRepositoryMock).addMessage(USER_ONE, SECOND_MESSAGE);
-        verify(timeLineRepositoryMock).addMessage(USER_ONE, THIRD_MESSAGE);
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/post")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("user", "Bob")
+                .param("message", "TOO_LONG_A_MESSAGE")
+        ).andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
-    public void testThrowMessageTooLongExceptionIfPostMessageLongerThan500Characters() throws MessageTooLongException{
-        //Act / Assert
-        MessageTooLongException thrown = assertThrows(
-                MessageTooLongException.class,
-                () -> unitUnderTest.post(USER_ONE, TOO_LONG_A_MESSAGE),
-                "MessageTooLongException not thrown"
-        );
+    void testPostAMessageReturns500() throws Exception {
+        doThrow(RuntimeException.class)
+                .when(userServiceMock)
+                .post(anyString(), anyString());
 
-        //Assert
-        assertTrue(thrown.getMessage().contains(EXPECTED_MESSAGE_TOO_LONG_MESAGE));
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/post")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("user", "Bob")
+                .param("message", "Will throw exception")
+        ).andExpect(MockMvcResultMatchers.status().isInternalServerError());
     }
-
-    @Test
-    public void testCanReadFromAUsersTimeline() throws MessageTooLongException{
-        //Arrange
-        unitUnderTest.post(USER_ONE, FIRST_MESSAGE);
-
-        //Act
-        unitUnderTest.getTimeline(USER_ONE);
-
-        //Assert
-        verify(timeLineRepositoryMock).getTimeline(USER_ONE);
-    }
-
-    @Test
-    public void testCanFollowAnotherUser() {
-        //Arrange
-        List<String> subscriptions = new ArrayList<String>(){{ add(USER_TWO); }};
-
-        //Act
-        unitUnderTest.subscribes(subscriptions, USER_ONE);
-
-        //Assert
-        verify(followersRepositoryMock).subscribe(subscriptions, USER_ONE);
-    }
-
-    @Test
-    public void testCanFolowMultipleUsers(){
-        //Arrange
-        List<String> subscriptions = new ArrayList<String>(){{ add(USER_TWO); add(USER_THREE); }};
-
-        //Act
-        unitUnderTest.subscribes(subscriptions, USER_ONE);
-
-        //Assert
-        verify(followersRepositoryMock).subscribe(subscriptions, USER_ONE);
-    }
-
-    @Test
-    public void testSubscriptionsOfUser(){
-        //Act
-        unitUnderTest.getSubscriptions(USER_ONE);
-
-        //Assert
-        verify(followersRepositoryMock).getSubscriptions(USER_ONE);
-    }
-
-
 }
