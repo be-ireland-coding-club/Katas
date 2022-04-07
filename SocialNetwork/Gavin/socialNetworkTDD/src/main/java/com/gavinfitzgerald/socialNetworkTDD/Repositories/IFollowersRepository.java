@@ -1,4 +1,4 @@
-package com.gavinfitzgerald.socialNetworkTDD;
+package com.gavinfitzgerald.socialNetworkTDD.Repositories;
 
 import java.util.List;
 

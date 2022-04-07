@@ -1,5 +1,10 @@
 package com.gavinfitzgerald.socialNetworkTDD;
 
+import com.gavinfitzgerald.socialNetworkTDD.DTOs.Message;
+import com.gavinfitzgerald.socialNetworkTDD.DTOs.MessageTooLongException;
+import com.gavinfitzgerald.socialNetworkTDD.Repositories.IFollowersRepository;
+import com.gavinfitzgerald.socialNetworkTDD.Repositories.ITimeLineRepository;
+import com.gavinfitzgerald.socialNetworkTDD.Services.UserService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -8,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import org.mockito.Mockito;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -21,35 +25,35 @@ public class UserServiceTests extends BaseTestClass{
     @Mock
     private ITimeLineRepository timeLineRepositoryMock;
 
-    @Mock IFollowersRepository followersRepositoryMock;
+    @Mock
+    IFollowersRepository followersRepositoryMock;
 
     @Test
     public void testCanPublishMessageToPersonalTimeline() throws MessageTooLongException {
         //Arrange
-        String message = "Hello World";
         List<Message> messages = new ArrayList<Message>();
-        messages.add(new Message(USER_ONE, message, new Date()));
+        messages.add(USER_ONE_FIRST_MESSAGE);
         Mockito.when(timeLineRepositoryMock.getTimeline(anyString())).thenReturn(messages);
 
         //Act
-        unitUnderTest.post(USER_ONE, message);
+        unitUnderTest.post(USER_ONE_FIRST_MESSAGE);
 
         //Assert
-        verify(timeLineRepositoryMock).addMessage(USER_ONE, message);
+        verify(timeLineRepositoryMock).addMessage(USER_ONE_FIRST_MESSAGE);
     }
 
     @Test
     public void testCanPublishMultilpleMessageToPersonalTimeline() throws MessageTooLongException{
 
         //Act
-        unitUnderTest.post(USER_ONE, FIRST_MESSAGE);
-        unitUnderTest.post(USER_ONE, SECOND_MESSAGE);
-        unitUnderTest.post(USER_ONE, THIRD_MESSAGE);
+        unitUnderTest.post(USER_ONE_FIRST_MESSAGE);
+        unitUnderTest.post(USER_ONE_SECOND_MESSAGE);
+        unitUnderTest.post(USER_ONE_THIRD_MESSAGE);
 
         //Assert
-        verify(timeLineRepositoryMock).addMessage(USER_ONE, FIRST_MESSAGE);
-        verify(timeLineRepositoryMock).addMessage(USER_ONE, SECOND_MESSAGE);
-        verify(timeLineRepositoryMock).addMessage(USER_ONE, THIRD_MESSAGE);
+        verify(timeLineRepositoryMock).addMessage(USER_ONE_FIRST_MESSAGE);
+        verify(timeLineRepositoryMock).addMessage(USER_ONE_SECOND_MESSAGE);
+        verify(timeLineRepositoryMock).addMessage(USER_ONE_THIRD_MESSAGE);
     }
 
     @Test
@@ -57,7 +61,7 @@ public class UserServiceTests extends BaseTestClass{
         //Act / Assert
         MessageTooLongException thrown = assertThrows(
                 MessageTooLongException.class,
-                () -> unitUnderTest.post(USER_ONE, TOO_LONG_A_MESSAGE),
+                () -> unitUnderTest.post(USER_ONE_TOO_LONG_A_MESSAGE),
                 "MessageTooLongException not thrown"
         );
 
@@ -68,7 +72,7 @@ public class UserServiceTests extends BaseTestClass{
     @Test
     public void testCanReadFromAUsersTimeline() throws MessageTooLongException{
         //Arrange
-        unitUnderTest.post(USER_ONE, FIRST_MESSAGE);
+        unitUnderTest.post(USER_ONE_FIRST_MESSAGE);
 
         //Act
         unitUnderTest.getTimeline(USER_ONE);
@@ -108,6 +112,16 @@ public class UserServiceTests extends BaseTestClass{
 
         //Assert
         verify(followersRepositoryMock).getSubscriptions(USER_ONE);
+    }
+
+    @Test
+    public void testCanGetTimelineWithSubscriptions(){
+        //Act
+        List<String> subscriptions = new ArrayList<String>(){{add(USER_TWO); add(USER_THREE);}};
+        unitUnderTest.getTimelineWithSubscriptions(USER_ONE, subscriptions);
+
+        //Assert
+        verify(timeLineRepositoryMock).getTimeline(USER_ONE, subscriptions);
     }
 
 

@@ -1,4 +1,4 @@
-package com.gavinfitzgerald.socialNetworkTDD;
+package com.gavinfitzgerald.socialNetworkTDD.DTOs;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,17 +11,17 @@ public class Message implements Comparable<Message> {
     private final String user;
     private final Date timestamp;
 
-    public Message(String user, String message, Date timestamp) {
+    public Message(String user, String message) {
         this.user = user;
         this.message = message;
-        this.timestamp = timestamp;
+        this.timestamp = new Date();
     }
 
-    private String getMessage() {
+    public String getMessage() {
         return message;
     }
 
-    private String getUser() {
+    public String getUser() {
         return user;
     }
 

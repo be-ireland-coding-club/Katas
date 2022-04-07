@@ -1,7 +1,7 @@
 package com.gavinfitzgerald.socialNetworkTDD.Services;
 
-import com.gavinfitzgerald.socialNetworkTDD.Message;
-import com.gavinfitzgerald.socialNetworkTDD.MessageTooLongException;
+import com.gavinfitzgerald.socialNetworkTDD.DTOs.Message;
+import com.gavinfitzgerald.socialNetworkTDD.DTOs.MessageTooLongException;
 import com.gavinfitzgerald.socialNetworkTDD.Repositories.IFollowersRepository;
 import com.gavinfitzgerald.socialNetworkTDD.Repositories.ITimeLineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +20,11 @@ public class UserService implements IUserService {
     @Autowired
     private IFollowersRepository followersRepository;
 
-    public void post(String user, String message) throws MessageTooLongException {
-        if(message.length() > MAX_MESSAGE_LENGTH){
+    public void post(Message message) throws MessageTooLongException {
+        if(message.getMessage().length() > MAX_MESSAGE_LENGTH){
             throw new MessageTooLongException("Message too long. "+MAX_MESSAGE_LENGTH+" is the maximum number of characters.");
         }
-        timeLineRepository.addMessage(user, message);
+        timeLineRepository.addMessage(message);
     }
 
     /**
@@ -40,8 +40,9 @@ public class UserService implements IUserService {
     /**
      * Returns a users personal timeline combined with subscription timelines
      *
-     * @param   userName    Username to use in retrieval of timeline
-     * @return              A single timeline combining the users personal timeline and their subscription timelines
+     * @param userName Username to use in retrieval of timeline
+     * @param subscriptions List of "subscribed to" users to use in retrieval of timelines
+     * @return A single timeline combining the users personal timeline and their subscription timelines
      */
     public List<Message> getTimelineWithSubscriptions(String userName, List<String> subscriptions) {
         return timeLineRepository.getTimeline(userName, subscriptions);

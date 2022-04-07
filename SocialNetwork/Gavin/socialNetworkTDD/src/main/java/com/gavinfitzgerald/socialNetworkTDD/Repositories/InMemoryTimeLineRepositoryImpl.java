@@ -1,6 +1,6 @@
 package com.gavinfitzgerald.socialNetworkTDD.Repositories;
 
-import com.gavinfitzgerald.socialNetworkTDD.Message;
+import com.gavinfitzgerald.socialNetworkTDD.DTOs.Message;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -17,11 +17,11 @@ public class InMemoryTimeLineRepositoryImpl implements ITimeLineRepository {
 
     public List<Message> getTimeline(String user, List<String> subscriptions) {
         List<Message> personalTimeline = timelines.get(user);
-        return (personalTimeline != null) ? joinPersonalTimelineWithSubscriptions(personalTimeline, subscriptions) : null;
+        return joinPersonalTimelineWithSubscriptions(personalTimeline, subscriptions);
     }
 
     private List<Message> joinPersonalTimelineWithSubscriptions(List<Message> personalTimeline, List<String> subscriptions) {
-        List<Message> combinedTimeline = personalTimeline;
+        List<Message> combinedTimeline = (personalTimeline != null) ? personalTimeline : new ArrayList<Message>();
         for (String subscription: subscriptions) {
             List<Message> subscriptionTimeline = timelines.get(subscription);
             combinedTimeline = Stream.concat(combinedTimeline.stream(), subscriptionTimeline.stream())
@@ -31,13 +31,13 @@ public class InMemoryTimeLineRepositoryImpl implements ITimeLineRepository {
         return combinedTimeline;
     }
 
-    public void addMessage(String user, String message) {
-        if( timelines.containsKey(user)){
-            timelines.get(user).add(new Message(user, message, new Date()));
+    public void addMessage(Message message) {
+        if( timelines.containsKey(message.getUser())){
+            timelines.get(message.getUser()).add(message);
         } else {
             List<Message> userMessageList = new ArrayList<Message>();
-            userMessageList.add(new Message(user, message, new Date()));
-            timelines.put(user, userMessageList);
+            userMessageList.add(message);
+            timelines.put(message.getUser(), userMessageList);
         }
     }
 
