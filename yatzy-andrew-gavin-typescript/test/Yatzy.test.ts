@@ -4,39 +4,39 @@ import Yatzy from '../src/Yatzy';
 
 describe('Chance', () => {
   it('scores sum of all dice', () => {
-    assert.strictEqual(15, new Yatzy(2, 3, 4, 5, 1).chance());
-    assert.strictEqual(16, new Yatzy(3, 3, 4, 5, 1).chance());
+    assert.strictEqual(15, Yatzy.chance(2, 3, 4, 5, 1));
+    assert.strictEqual(16, Yatzy.chance(3, 3, 4, 5, 1));
   });
 });
 
 describe('Yatzy', () => {
   it('scores 50', () => {
-    assert.strictEqual(50, new Yatzy(4, 4, 4, 4, 4).yatzy());
-    assert.strictEqual(50, new Yatzy(6, 6, 6, 6, 6).yatzy());
-    assert.strictEqual(0, new Yatzy(6, 6, 6, 6, 3).yatzy());
+    assert.strictEqual(50, Yatzy.yatzy(4, 4, 4, 4, 4));
+    assert.strictEqual(50, Yatzy.yatzy(6, 6, 6, 6, 6));
+    assert.strictEqual(0, Yatzy.yatzy(6, 6, 6, 6, 3));
   });
 });
 
 describe('Ones', () => {
   it('score the sum of 1s', () => {
-    assert.strictEqual(1, new Yatzy(1, 2, 3, 4, 5).ones());
-    assert.strictEqual(2, new Yatzy(1, 2, 1, 4, 5).ones());
-    assert.strictEqual(0, new Yatzy(6, 2, 2, 4, 5).ones());
-    assert.strictEqual(4, new Yatzy(1, 2, 1, 1, 1).ones());
+    assert.strictEqual(1, Yatzy.ones(1, 2, 3, 4, 5));
+    assert.strictEqual(2, Yatzy.ones(1, 2, 1, 4, 5));
+    assert.strictEqual(0, Yatzy.ones(6, 2, 2, 4, 5));
+    assert.strictEqual(4, Yatzy.ones(1, 2, 1, 1, 1));
   });
 });
 
 describe('Twos', () => {
   it('score the sum of 2s', () => {
-    assert.strictEqual(4, new Yatzy(1, 2, 3, 2, 6).twos());
-    assert.strictEqual(10, new Yatzy(2, 2, 2, 2, 2).twos());
+    assert.strictEqual(4, Yatzy.twos(1, 2, 3, 2, 6));
+    assert.strictEqual(10, Yatzy.twos(2, 2, 2, 2, 2));
   });
 });
 
 describe('Threes', () => {
   it('score the sum of 3s', () => {
-    assert.strictEqual(6, new Yatzy(1, 2, 3, 2, 3).threes());
-    assert.strictEqual(12, new Yatzy(2, 3, 3, 3, 3).threes());
+    assert.strictEqual(6, Yatzy.threes(1, 2, 3, 2, 3));
+    assert.strictEqual(12, Yatzy.threes(2, 3, 3, 3, 3));
   });
 });
 
@@ -66,9 +66,9 @@ describe('Sixes', () => {
 
 describe('One pair', () => {
   it('scores the sum of the highest pair', () => {
-    assert.strictEqual(6, new Yatzy(3, 4, 3, 5, 6).one_pair());
-    assert.strictEqual(10, new Yatzy(5, 3, 3, 3, 5).one_pair());
-    assert.strictEqual(12, new Yatzy(5, 3, 6, 6, 5).one_pair());
+    assert.strictEqual(6, Yatzy.score_pair(3, 4, 3, 5, 6));
+    assert.strictEqual(10, Yatzy.score_pair(5, 3, 3, 3, 5));
+    assert.strictEqual(12, Yatzy.score_pair(5, 3, 6, 6, 5));
   });
 });
 
